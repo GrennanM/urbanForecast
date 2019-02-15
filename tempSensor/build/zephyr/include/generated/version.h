@@ -1,0 +1,14 @@
+#ifndef _KERNEL_VERSION_H_
+#define _KERNEL_VERSION_H_
+
+#define ZEPHYR_VERSION_CODE 68963
+#define ZEPHYR_VERSION(a,b,c) (((a) << 16) + ((b) << 8) + (c))
+
+#define KERNELVERSION          0x10D6300
+#define KERNEL_VERSION_NUMBER  0x10D63
+#define KERNEL_VERSION_MAJOR   1
+#define KERNEL_VERSION_MINOR   13
+#define KERNEL_PATCHLEVEL      99
+#define KERNEL_VERSION_STRING  "1.13.99"
+
+#endif /* _KERNEL_VERSION_H_ */
