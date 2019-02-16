@@ -1,12 +1,6 @@
-// Very basic DS18B20 implementation
-//
-// !!! NOT YET TESTED WITH A REAL DS18B20 !!!
+// DS18B20 implementation
 //
 // Refer https://github.com/feelfreelinux/ds18b20/blob/master/ds18b20.c
-//   and https://datasheets.maximintegrated.com/en/ds/DS18B20.pdf
-//   and https://www.maximintegrated.com/en/app-notes/index.mvp/id/126
-//   and https://github.com/milesburton/Arduino-Temperature-Control-Library
-//
 
 #include <zephyr.h>
 #include <board.h>
@@ -17,23 +11,9 @@
 
 #define PORT	"GPIO_0"
 #define PIN		11
-#define SLEEP_TIME 5000
-
-// // LED setup
-#define LED_PORT LED0_GPIO_CONTROLLER
-#define LED	LED0_GPIO_PIN
-#define TEMP_THRESHOLD 24
+#define SLEEP_TIME 100
 
 struct device *dev;
-struct device *dev1; //for LED
-//
-// NOTE: Assumes a DS18B20 with a 4.7Kohm resistor between DATA and Vcc pins.
-// NOTE: Not assuming parasitic power supply to DS18B20.
-//
-// NOTE: We use irq_lock and irq_unlock below to temperarily disable interrupts
-//       (and hence multithreading) while we pause for very short delays to
-//       implement 1-wire protocol timings.
-//
 
 // Send one bit over 1-wire
 void ds18b20_send_bit(u8_t bit)
@@ -177,47 +157,31 @@ s16_t ds18b20_get_temp()
 		return 0;
 	}
 
-	// Convert to degrees C temperature, dropping everything to the right
-	// of the decimal point (NOTE: you might want to retain this additional
-	// accuracy and add FP support to publish FP data to thingsboard.io!!)
+	// Convert to degrees C temperature
 	return (s16_t)((((u16_t)tempMSB << 8) + (u16_t)tempLSB) >> 4);
 }
 
 void main(void)
 {
 	u16_t temperature;
+	int i;
 
-	// LED setup
-	printk("Starting...\n");
-	dev1 = device_get_binding(LED_PORT); // get binding for LED
-	gpio_pin_configure(dev1, LED, GPIO_DIR_OUT); // configure LED
+	SEGGER_RTT_WriteString(0, "temperature\r\n");
 
 	// temperature
-	printk("Preparing DS18B20\n");
 	dev = device_get_binding(PORT);
 
 	if (gpio_pin_configure(dev, PIN, GPIO_DIR_IN)) {
 		printk("Pin configure failed\n");
 	}
 
-	while (true) {
+	for (i = 0; i < 1000; i++) {
 
 		// delay between samples
 		k_sleep(SLEEP_TIME);
 
-		printk("\nSampling ... ");
-
 		temperature = ds18b20_get_temp();
 
-		// LED setup: turn on/off LED depending on temperature
-		if (temperature > TEMP_THRESHOLD){
-			gpio_pin_write(dev1, LED, 0); //turn on
-		}
-		else{
-			gpio_pin_write(dev1, LED, 1); // turn off
-		}
-
-		printk("current temperature: %i degrees C\n", temperature);
-
+		printk("%i\n", temperature);
 	}
 }
