@@ -1,4 +1,4 @@
-"""parses text from DublinBayBuoy twitter (https://twitter.com/DublinBayBuoy),
+"""Parses text from DublinBayBuoy twitter (https://twitter.com/DublinBayBuoy),
 adds historical tweets from timeline to local db"""
 
 import tweepy
@@ -32,5 +32,5 @@ for status in tweepy.Cursor(api.user_timeline, id=DUBLINBAYBUOY_ID).items():
         print("Failed to post to db: ", e)
 
 
-# print number of rows
+# print number of rows in db
 print(len(table))

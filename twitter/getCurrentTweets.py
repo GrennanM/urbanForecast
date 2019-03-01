@@ -1,4 +1,4 @@
-""""parses text from DublinBayBuoy twitter (https://twitter.com/DublinBayBuoy),
+""""Parses text from DublinBayBuoy twitter (https://twitter.com/DublinBayBuoy),
 adds data to local db and posts to Firebase as json"""
 
 import json
