@@ -5,6 +5,47 @@ import dataset
 from datetime import datetime, timedelta
 import ast
 from settings import *
+import math
+
+# hard coded tide times and tide heights for 16th March
+tideTimes = [0, 7, 13, 19.6]
+tideHeight = [1.4, 3.3, 1.2, 3.4]
+
+def convertTimeToFloat(timeString):
+    """input: time in hours:minutes
+    output: time as float"""
+
+    currentTimeList = timeString.split(":")
+    currentTimeFloat = round(
+        float(currentTimeList[0]) + float(currentTimeList[1]) / 60, 2)
+
+    return currentTimeFloat
+
+
+def getCurrentTideHeight(currentTimeString):
+    """input: current time as rounded string (hours:minutes),
+    output: height of tide"""
+
+    currentTimeFloat = convertTimeToFloat(currentTimeString)
+
+    # get high and low tide, and time of first High tide
+    if tideHeight[0] > tideHeight[1]:
+        highTideHeight = tideHeight[0]
+        lowTideHeight = tideHeight[1]
+        firstHighTideTime = tideTimes[0]
+    else:
+        highTideHeight = tideHeight[1]
+        lowTideHeight = tideHeight[0]
+        firstHighTideTime = tideTimes[1]
+
+    amplitude = (highTideHeight - lowTideHeight) / 2
+    midway = amplitude + lowTideHeight
+    timeFromFirstHighTide = currentTimeFloat - firstHighTideTime
+
+    currentTideHeight = round(midway + abs(amplitude) * math.cos(0.5 * timeFromFirstHighTide), 1)
+
+    return currentTideHeight
+
 
 def getCompassDirections(windDir):
     """input: str between 0 and 360,
@@ -22,7 +63,7 @@ def getCompassDirections(windDir):
 
 def roundTime(dateTimeString):
     """rounds a datetime string to nearest 20 minutes,
-    input: dateTimeString, output: timeString"""
+    input: dateTimeString, output: time as string (hours:minutes)"""
 
     dateTimeObj = datetime.strptime(dateTimeString, '%d/%m/%Y %H:%M:%S')
 
@@ -60,6 +101,9 @@ def parseTweet(tweet):
     windDirect = float(windDirection.group().split(":")[1])
     compassDir = getCompassDirections(windDirect)
 
+    # add tide height
+    tideHeight = getCurrentTideHeight(roundedTime)
+
     try:
         parsedTweet = dict(waterTemp=float(waterTemp.group().split(":")[1]),
                      waveHeight=float(waveHeight.group().split(":")[1]),
@@ -69,7 +113,8 @@ def parseTweet(tweet):
                      gust=float(gust.group().split(":")[1]),
                      dateTime=dateTimeObject,
                      roundedTime=roundedTime,
-                     compassDir=compassDir)
+                     compassDir=compassDir,
+                     tideHeight=tideHeight)
     except Exception as e:
         print ("Failed to parse tweet")
         return None
