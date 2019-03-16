@@ -1,0 +1,28 @@
+{% extends "layout.html" %}
+
+{% block title %}Real Time Weather for Killiney Bay{% endblock %}
+
+{% block main %}
+<table class="table table-striped">
+  <thead>
+    <tr>
+      <th>Time</th>
+      <th>Wave Height</th>
+      <th>Wind Direction</th>
+      <th>Wind Speed</th>
+      <th>Tide Height</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for entry in weatherList %}
+    <tr>
+      {% for indvWeather in entry %}
+      <td>
+        {{indvWeather}}
+      </td>
+      {% endfor %}
+    </tr>
+    {% endfor %}
+    </tbody>
+</table>
+{% endblock %}
