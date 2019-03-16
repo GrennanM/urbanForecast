@@ -6,6 +6,19 @@ from datetime import datetime, timedelta
 import ast
 from settings import *
 
+def getCompassDirections(windDir):
+    """input: str between 0 and 360,
+    output: compass bearing"""
+
+    compassDict = {1:'N', 2:'NNE', 3:'NE', 4:'ENE', 5:'E', 6:'ESE', 7:'SE',
+                    8:'SSE', 9:'S', 10:'SSW', 11:'SW', 12:'WSW', 13:'W',
+                    14:'WNW', 15:'NW', 16:'NNW', 17:'N'}
+
+    windDirDegrees = float(windDir)
+    compassIndex = round(windDirDegrees/22.5) + 1
+
+    return compassDict[compassIndex]
+
 
 def roundTime(dateTimeString):
     """rounds a datetime string to nearest 20 minutes,
@@ -36,12 +49,16 @@ def parseTweet(tweet):
     gust = re.search(r'Gust:[0-9][0-9]|Gust:[0-9]', tweet)
     dateTimeTemp = re.search(r'at .*', tweet)
 
-    # convert dateTime to datetimeObject
+    # convert dateTime to datetimeObject for local db
     dateTime = dateTimeTemp.group().split(" ")[1] + " " + dateTimeTemp.group().split(" ")[2]
     dateTimeObject = datetime.strptime(dateTime, '%d/%m/%Y %H:%M:%S')
 
-    # round time
+    # add time rounded to nearest 20 minutes
     roundedTime = roundTime(dateTime)
+
+    # add compass direction
+    windDirect = float(windDirection.group().split(":")[1])
+    compassDir = getCompassDirections(windDirect)
 
     try:
         parsedTweet = dict(waterTemp=float(waterTemp.group().split(":")[1]),
@@ -51,7 +68,8 @@ def parseTweet(tweet):
                      avgWind=float(avgWind.group().split(":")[1]),
                      gust=float(gust.group().split(":")[1]),
                      dateTime=dateTimeObject,
-                     roundedTime=roundedTime)
+                     roundedTime=roundedTime,
+                     compassDir=compassDir)
     except Exception as e:
         print ("Failed to parse tweet")
         return None
