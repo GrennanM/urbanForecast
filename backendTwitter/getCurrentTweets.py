@@ -9,7 +9,7 @@ import dataset
 from datetime import datetime
 import ast
 from settings import *
-from helperFunctions import *
+from main import *
 
 
 # Authenticate with Twitter
