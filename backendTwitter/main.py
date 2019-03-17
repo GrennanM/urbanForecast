@@ -1,13 +1,11 @@
-import json
-import requests
 import re
 import dataset
 from datetime import datetime, timedelta
-import ast
 from settings import *
 import math
 from urllib.request import urlopen
 from bs4 import BeautifulSoup
+from firebase import firebase
 
 METRE_CONVERSION = 0.3048 # to convert from feet to metres
 
@@ -160,21 +158,3 @@ def parseTweet(tweet):
         return None
 
     return parsedTweet
-
-
-def postToFirebase(parsedTweet):
-    """post parsed tweet to Firebase, input: dict, output: none"""
-
-    # convert datetime object to string for posting to Firebase
-    tweetDump = json.dumps(parsedTweet, default=str)
-    tweetDict = ast.literal_eval(tweetDump)
-
-    try:
-        requests.post(url=myUrl, json=tweetDict)
-    except Exception as e:
-        print ("Failed to post to Firebase: ", e)
-
-
-# sample = "Water Temp:8.2 °C, Wave Height:0.7m, Wind Dir:276 °(W), Gust Dir:269 °(W), Avg Wind:26kts, Gust:34kts at 16/03/2019 21:47:00"
-# x = parseTweet(sample)
-# print (x)
