@@ -1,15 +1,13 @@
 """"Parses text from DublinBayBuoy twitter (https://twitter.com/DublinBayBuoy),
 adds data to local db and posts to Firebase as json"""
 
-import json
 import tweepy
-import requests
 import re
 import dataset
 from datetime import datetime
-import ast
 from settings import *
 from main import *
+from firebase import firebase
 
 
 # Authenticate with Twitter
@@ -20,9 +18,12 @@ auth.set_access_token(ACCESS_TOKEN, ACCESS_SECRET)
 api = tweepy.API(auth, wait_on_rate_limit=True,
                  wait_on_rate_limit_notify=True, compression=True)
 
+# local db
 db = dataset.connect('sqlite:///dublinBayBuoydb2.db')
 table = db['dublinBBTable2']
 
+# Firebase authentication
+firebase = firebase.FirebaseApplication(myUrl, None)
 
 # Create a listener
 class StreamListener(tweepy.StreamListener):
@@ -37,16 +38,19 @@ class StreamListener(tweepy.StreamListener):
 
     def on_status(self, status):
 
-        tweet = status.text # record text of tweet
-        parsedTweet = parseTweet(tweet)
+        # post parsed tweet to firebase
+        tweet = status.text
+        try:
+            parsedTweet = parseTweet(tweet)
+            firebase.post('/weather', parsedTweet)
+        except:
+            print ("Failed to parse tweet")
 
         # add tweet to local db
         try:
             table.insert(parsedTweet)
         except Exception as e:
             print("Failed to post to db: ", e)
-
-        postToFirebase(parsedTweet)
 
 
 # listen for new tweets from DublinBayBuoy
