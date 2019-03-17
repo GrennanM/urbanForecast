@@ -28,7 +28,7 @@ def getTideTimesAndTideHeights():
     returns: 2 lists, first list contains first two tide times for current date,
     second list contain first two tide heights for current dates"""
 
-    url = "https://www.tide-forecast.com/locations/Dublin-Ireland/tides/latest"
+    url = urlTidesInfo
     html = urlopen(url)
     soup = BeautifulSoup(html, 'lxml')
 
@@ -58,8 +58,9 @@ def getTideTimesAndTideHeights():
 
 
 def getCurrentTideHeight(currentTimeString):
-    """input: current time as rounded string (hours:minutes),
-    output: height of tide"""
+    """estimates current tide height given local time,
+    input: current time as rounded string (hours:minutes),
+    output: estimate of tide height"""
 
     # convert time in hours:minutes as string to float
     currentTimeFloat = convertTimeToFloat(currentTimeString)
@@ -109,7 +110,7 @@ def roundTime(dateTimeString):
     # round to nearest 20 minute
     discard = timedelta(minutes=dateTimeObj.minute % 20)
     dateTimeObj -= discard
-    if discard >= timedelta(minutes=10):
+    if discard > timedelta(minutes=10):
         dateTimeObj += timedelta(minutes=20)
 
     result = dateTimeObj.strftime('%H:%M')
