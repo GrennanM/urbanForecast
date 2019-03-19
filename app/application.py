@@ -14,12 +14,12 @@ def getCurrentWeather():
     for weatherReading in weatherResults.values():
         currentWeather.extend([weatherReading['roundedTime'], weatherReading['waveHeight'],
                                weatherReading['compassDir'], weatherReading['avgWind'],
-                               weatherReading['tideHeight']])
+                               weatherReading['tideHeight'], weatherReading['starRating']])
         weatherList.append(currentWeather)
         currentWeather = []
 
-    # return weatherList[-10:]
-    return weatherList
+    return weatherList[-1:]
+    # return weatherList
 
 
 def getCurrentWaterTemperature():
