@@ -133,6 +133,8 @@ def getStarRating(waveHeight, windDir, avgWind, tideHeight):
     # check upper bound of 5 stars
     if starRating > 5:
         starRating = 5
+    elif waveHeight < 1:
+        starRating = 0
 
     return starRating
 
@@ -204,3 +206,10 @@ def parseTweet(tweet):
         return None
 
     return parsedTweet
+
+# # sample
+# # Firebase authentication
+# firebase = firebase.FirebaseApplication(myUrl, None)
+# tweet = "Water Temp:8 °C, Wave Height:0.2m, Wind Dir:168 °(S), Gust Dir:168 °(S), Avg Wind:11kts, Gust:14kts at 19/03/2019 09:05:00"
+# parsedTweet = parseTweet(tweet)
+# firebase.post('/weather', parsedTweet)
