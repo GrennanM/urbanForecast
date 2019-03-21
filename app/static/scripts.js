@@ -1,9 +1,9 @@
 var ref = firebase.database().ref('weather');
 
-var totalNumberRows = 2;
 var totalNumberCols = 6;
 
-ref.limitToLast(totalNumberRows).on('value', function snapshotToArray(snapshot) {
+// read last entry in db
+ref.limitToLast(1).on('value', function snapshotToArray(snapshot) {
 
   // get the reference for the table body
   var tblBody = document.getElementById('tblBody');
