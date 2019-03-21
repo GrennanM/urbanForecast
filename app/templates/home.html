@@ -16,7 +16,17 @@
     </tr>
   </thead>
 
-  <tbody id="tblBody"></tbody>
+  <tbody id="tblBody">
+    {% for entry in weatherList %}
+  <tr>
+    {% for indvWeather in entry %}
+    <td>
+      {{indvWeather}}
+    </td>
+    {% endfor %}
+  </tr>
+  {% endfor %}
+</tbody>
 
 </table>
 
