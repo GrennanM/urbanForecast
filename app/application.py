@@ -7,6 +7,20 @@ from settings import *
 firebase = firebase.FirebaseApplication(myUrl, None)
 weatherResults = firebase.get('/weather', None)
 
+def getCurrentWeather():
+    """returns: last 4 weather readings from firebase"""
+    weatherList = []
+    currentWeather = []
+    for weatherReading in weatherResults.values():
+        currentWeather.extend([weatherReading['roundedTime'], weatherReading['waveHeight'],
+                               weatherReading['compassDir'], weatherReading['avgWind'],
+                               weatherReading['tideHeight'], weatherReading['starRating']])
+        weatherList.append(currentWeather)
+        currentWeather = []
+
+    return weatherList[-5:-1:1]
+
+
 def getCurrentWaterTemperature():
     """returns average of last 10 water temperature readings from db"""
 
@@ -40,6 +54,6 @@ def getCurrentAirTemperature():
 app = Flask(__name__)
 
 @app.route('/')
-def helloWorld():
-    return render_template("home.html",  waterTemp=getCurrentWaterTemperature(),
+def homePage():
+    return render_template("home.html", weatherList=getCurrentWeather(), waterTemp=getCurrentWaterTemperature(),
                            airTemp=getCurrentAirTemperature())
