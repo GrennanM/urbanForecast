@@ -3,6 +3,7 @@
 {% block title %}Real Time Weather for Dublin Bay{% endblock %}
 
 {% block main %}
+
 <table class="table table-striped">
   <thead>
     <tr>
@@ -14,16 +15,9 @@
       <th>Star Rating</th>
     </tr>
   </thead>
-  <tbody>
-    {% for entry in weatherList %}
-    <tr>
-      {% for indvWeather in entry %}
-      <td>
-        {{indvWeather}}
-      </td>
-      {% endfor %}
-    </tr>
-    {% endfor %}
-    </tbody>
+
+  <tbody id="tblBody"></tbody>
+
 </table>
+
 {% endblock %}
