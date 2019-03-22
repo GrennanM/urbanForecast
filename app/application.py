@@ -7,8 +7,10 @@ from settings import *
 firebase = firebase.FirebaseApplication(myUrl, None)
 weatherResults = firebase.get('/weather', None)
 
-def getCurrentWeather():
-    """returns: last 4 weather readings from firebase"""
+def getCurrentWeather(numberReadings):
+    """input: number of weather readings (int),
+    returns: most recent weather readings from firebase (list)"""
+
     weatherList = []
     currentWeather = []
     for weatherReading in weatherResults.values():
@@ -18,7 +20,7 @@ def getCurrentWeather():
         weatherList.append(currentWeather)
         currentWeather = []
 
-    return weatherList[-5:-1:1]
+    return weatherList[-numberReadings-1:-1:1]
 
 
 def getCurrentWaterTemperature():
@@ -55,5 +57,21 @@ app = Flask(__name__)
 
 @app.route('/')
 def homePage():
-    return render_template("home.html", weatherList=getCurrentWeather(), waterTemp=getCurrentWaterTemperature(),
+    return render_template("home.html", weatherList=getCurrentWeather(3), waterTemp=getCurrentWaterTemperature(),
                            airTemp=getCurrentAirTemperature())
+
+
+@app.route('/waveHeight')
+def displayWaveHeight():
+    return render_template("waveHeight.html", waterTemp=getCurrentWaterTemperature(),
+                           airTemp=getCurrentAirTemperature())
+
+
+@app.route('/windDirection')
+def displayWindDirection():
+    return "Wind Direction"
+
+
+@app.route('/windSpeed')
+def displayWindSpeed():
+    return "Wind Speed"
