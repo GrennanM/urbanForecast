@@ -1,0 +1,9 @@
+{% extends "layout.html" %}
+
+{% block title %}Real Time Weather for Dublin Bay{% endblock %}
+
+{% block main %}
+
+<img src="{{ url_for('static', filename='currentTide.png') }}" alt="wave height graph" class="img-responsive center" />
+
+{% endblock %}
