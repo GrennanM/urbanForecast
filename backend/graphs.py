@@ -55,5 +55,3 @@ def plotTides():
     plt.ylabel("Tide Height (m)")
 
     return plt.savefig(staticFilePath + "currentTide.png")
-
-plotWaveHeightWindSpeed()
