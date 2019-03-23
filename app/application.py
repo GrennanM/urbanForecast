@@ -3,6 +3,7 @@ from firebase import firebase
 from datetime import datetime, timedelta
 from settings import *
 
+
 # get readings from Firebase
 firebase = firebase.FirebaseApplication(myUrl, None)
 weatherResults = firebase.get('/weather', None)
@@ -37,6 +38,7 @@ def getCurrentWaterTemperature():
 
     return averageWaterTemp
 
+
 def getCurrentAirTemperature():
     """returns average of last two air temperature readings from db"""
 
@@ -67,11 +69,7 @@ def displayWaveHeight():
                            airTemp=getCurrentAirTemperature())
 
 
-@app.route('/windDirection')
-def displayWindDirection():
-    return "Wind Direction"
-
-
-@app.route('/windSpeed')
-def displayWindSpeed():
-    return "Wind Speed"
+@app.route('/tide')
+def displayTide():
+    return render_template("tide.html", waterTemp=getCurrentWaterTemperature(),
+                           airTemp=getCurrentAirTemperature())
