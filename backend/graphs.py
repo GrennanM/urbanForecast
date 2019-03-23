@@ -1,6 +1,7 @@
 from firebase import firebase
 from datetime import datetime
 from settings import *
+import pandas as pd
 import matplotlib.pyplot as plt
 
 
@@ -54,3 +55,5 @@ def plotTides():
     plt.ylabel("Tide Height (m)")
 
     return plt.savefig(staticFilePath + "currentTide.png")
+
+plotWaveHeightWindSpeed()
