@@ -1,0 +1,6 @@
+tweepy
+re
+datetime
+firebase
+pandas
+matplotlib.pyplot
