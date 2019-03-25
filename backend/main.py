@@ -3,7 +3,6 @@ adds data to local db and posts to Firebase as json"""
 
 import tweepy
 import re
-import dataset
 from datetime import datetime
 from settings import *
 from main import *
@@ -17,10 +16,6 @@ auth.set_access_token(ACCESS_TOKEN, ACCESS_SECRET)
 # Create api to connect to twitter with credentials
 api = tweepy.API(auth, wait_on_rate_limit=True,
                  wait_on_rate_limit_notify=True, compression=True)
-
-# local db
-db = dataset.connect('sqlite:///dublinBayBuoydb2.db')
-table = db['dublinBBTable2']
 
 # Firebase authentication
 firebase = firebase.FirebaseApplication(myUrl, None)
@@ -46,11 +41,9 @@ class StreamListener(tweepy.StreamListener):
         except:
             print ("Failed to parse tweet")
 
-        # add tweet to local db
-        try:
-            table.insert(parsedTweet)
-        except Exception as e:
-            print("Failed to post to db: ", e)
+        # update graphs
+        plotTides()
+        plotWaveHeightWindSpeed()
 
 
 # listen for new tweets from DublinBayBuoy
