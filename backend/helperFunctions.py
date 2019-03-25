@@ -205,11 +205,3 @@ def parseTweet(tweet):
         return None
 
     return parsedTweet
-
-
-# sample
-# Firebase authentication
-firebase = firebase.FirebaseApplication(myUrl, None)
-tweet = "Water Temp:8.5 °C, Wave Height:0.2m, Wind Dir:142 °(SE), Gust Dir:150 °(SE), Avg Wind:6kts, Gust:7kts at 21/03/2019 13:05:00"
-parsedTweet = parseTweet(tweet)
-firebase.post('/weather', parsedTweet)
