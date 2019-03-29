@@ -40,7 +40,8 @@ def plotWaveHeightWindSpeed():
     ax2.tick_params(axis='y', labelcolor=color)
 
     fig.tight_layout()
-    return plt.savefig(staticFilePath + "waveHeight_windSpeed.png")
+    plt.savefig(staticFilePath + "waveHeight_windSpeed.png")
+    return 0
 
 
 def plotTides():
@@ -54,4 +55,5 @@ def plotTides():
     plt.xlabel("Time")
     plt.ylabel("Tide Height (m)")
 
-    return plt.savefig(staticFilePath + "currentTide.png")
+    plt.savefig(staticFilePath + "currentTide.png")
+    return 0
