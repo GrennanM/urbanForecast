@@ -1,6 +1,11 @@
 tweepy
-re
 datetime
 firebase
 pandas
-matplotlib.pyplot
+matplotlib
+bs4
+firebase
+python_jwt
+gcloud
+sseclient
+requests_toolbelt
