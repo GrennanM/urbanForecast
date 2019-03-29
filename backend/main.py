@@ -5,8 +5,9 @@ import tweepy
 import re
 from datetime import datetime
 from settings import *
-from main import *
-from firebase import firebase
+from helperFunctions import *
+from graphs import *
+from firebase.firebase import FirebaseApplication
 
 
 # Authenticate with Twitter
@@ -18,7 +19,7 @@ api = tweepy.API(auth, wait_on_rate_limit=True,
                  wait_on_rate_limit_notify=True, compression=True)
 
 # Firebase authentication
-firebase = firebase.FirebaseApplication(myUrl, None)
+app = FirebaseApplication(myUrl, None)
 
 # Create a listener
 class StreamListener(tweepy.StreamListener):
@@ -37,7 +38,7 @@ class StreamListener(tweepy.StreamListener):
         tweet = status.text
         try:
             parsedTweet = parseTweet(tweet)
-            firebase.post('/weather', parsedTweet)
+            app.post('/weather', parsedTweet)
         except:
             print ("Failed to parse tweet")
 
