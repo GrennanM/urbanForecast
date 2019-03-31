@@ -59,7 +59,7 @@ app = Flask(__name__)
 
 @app.route('/')
 def homePage():
-    return render_template("home.html", weatherList=getCurrentWeather(3), waterTemp=getCurrentWaterTemperature(),
+    return render_template("home.html", weatherList=getCurrentWeather(9), waterTemp=getCurrentWaterTemperature(),
                            airTemp=getCurrentAirTemperature())
 
 
