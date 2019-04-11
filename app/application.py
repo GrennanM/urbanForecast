@@ -3,7 +3,6 @@ from firebase import firebase
 from datetime import datetime, timedelta
 from settings import *
 
-
 # get readings from Firebase
 firebase = firebase.FirebaseApplication(myUrl, None)
 weatherResults = firebase.get('/weather', None)
@@ -47,7 +46,7 @@ def getCurrentAirTemperature():
     airTempList = [a['temp'] for a in airTemps.values()]
 
     result = 0
-    for i in range(2):
+    for i in range(1, 3):
         result += airTempList[-i]
 
     averageAirTemp = round(result / 2, 1)
