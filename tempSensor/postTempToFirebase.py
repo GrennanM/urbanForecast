@@ -6,8 +6,11 @@ import serial
 import re
 from datetime import datetime, timedelta
 from settings import *
-from firebase import firebase
 import time
+from firebase.firebase import FirebaseApplication
+
+# Firebase authentication
+app = FirebaseApplication(myUrl, None)
 
 
 def roundTime(dateTimeString):
@@ -40,9 +43,8 @@ while True:
     roundedTime = roundTime(currentTime)
 
     # post temp to Firebase
-    firebase = firebase.FirebaseApplication(myUrl, None)
     toPost = {"temp": tempFloat, 'dateTime': currentTime,
               'roundedTime': roundedTime}
-    firebase.post('/airTemp', toPost)
+    app.post('/airTemp', toPost)
 
-    time.sleep(300)
+    time.sleep(20)
